@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="hide_data1" model="ir.rule">
+            <field name="name">hide data1</field>
+            <field ref="base.model_res_partner" name="model_id"/>
+            <field name="domain_force">[] if user.id == 2 else ['|',('id','=',user.partner_id.id),('user_id','=',user.id)]
+            </field>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <field name="global" eval="1"/>
+        </record>
+
+        <record id="make_invisible" model="res.groups">
+            <field name="name">Invisible</field>
+        </record>
+
+
+    </data>
+</odoo>

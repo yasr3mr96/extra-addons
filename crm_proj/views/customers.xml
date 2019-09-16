@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_customers_form_inherit" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='state_id']" position="attributes">
+                    <attribute name="attrs">{'required':[('customer','=',True)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='country_id']" position="attributes">
+                    <attribute name="attrs">{'required':[('customer','=',True)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='phone']" position="attributes">
+                    <attribute name="attrs">{'required':[('customer','=',True)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="trn" attrs="{'invisible':[('customer','=',False)]}"/>
+                </xpath>
+
+                 <xpath expr="//label[@for='street']" position="before">
+                    <field name="customer_id" attrs="{'invisible':[('customer','=',False)]}"/>
+                    <field name="business_name" attrs="{'invisible':[('customer','=',False)]}"/>
+                </xpath>
+
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="customer_group" attrs="{'invisible':[('customer','=',False)]}"/>
+                    <field name="customer_source" attrs="{'invisible':[('customer','=',False)]}"/>
+                </xpath>
+
+
+
+            </field>
+        </record>
+
+
+         <record id="action_contacts_company" model="ir.actions.act_window">
+            <field name="name">Company</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('customer','=',True),('is_company','=',True)]</field>
+            <field name="context">{'default_is_company':True,'default_user_id':uid}</field>
+            <field name="view_mode">kanban,tree,form,activity</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a customer/company in your address book
+                </p>
+                <p>
+                    Odoo helps you to easily track all activities related to a customer.
+                </p>
+            </field>
+        </record>
+
+         <record id="action_contacts_individual" model="ir.actions.act_window">
+            <field name="name">Individual</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('customer','=',True),('is_company','=',False)]</field>
+            <field name="context">{'default_is_company':True,'default_user_id':uid}</field>
+            <field name="view_mode">kanban,tree,form,activity</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a customer/individual in your address book
+                </p>
+                <p>
+                    Odoo helps you to easily track all activities related to a customer.
+                </p>
+            </field>
+        </record>
+
+
+        <record id="contacts.action_contacts" model="ir.actions.act_window">
+            <field name="name">Customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('customer','=',True)]</field>
+            <field name="context">{'default_is_company':True,'default_user_id':uid}</field>
+            <field name="view_mode">kanban,tree,form,activity</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a customer in your address book
+                </p>
+                <p>
+                    Odoo helps you to easily track all activities related to a customer.
+                </p>
+            </field>
+        </record>
+
+        <record id="base.action_partner_form" model="ir.actions.act_window">
+            <field name="name">Customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('customer','=',True)]</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"search_default_customer":1,'default_is_company':True,'default_user_id':uid}</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new customer in your address book
+                </p>
+                <p>
+                    Odoo helps you easily track all activities related to a customer.
+                </p>
+            </field>
+        </record>
+        contacts.menu_contacts
+
+        <!-- This Menu Item Must have a parent -->
+        <menuitem id="menu_customers" name="Customer"
+                  web_icon="crm_proj,static/images/customer.png"
+        />
+
+        <menuitem id="contacts.res_partner_menu_contacts"
+                  name="Customers"
+                  action="contacts.action_contacts"
+                  parent="menu_customers"
+                  sequence="0"/>
+
+        <menuitem id="res_partner_menu_contacts_company"
+                  name="Company"
+                  action="action_contacts_company"
+                  parent="menu_customers"
+                  sequence="1"/>
+
+         <menuitem id="res_partner_menu_contacts_individual"
+                  name="Individual"
+                  action="action_contacts_individual"
+                  parent="menu_customers"
+                  sequence="2"/>
+
+
+        <menuitem id="sale.res_partner_menu"
+                  parent="sale.sale_order_menu"
+                  action="base.action_partner_form"
+                  sequence="4" groups="sales_team.group_sale_salesman"/>
+
+        <record model="ir.ui.menu" id="contacts.menu_contacts">
+            <field name="groups_id" eval="[(6,0,[ref('make_invisible')])]"/>
+        </record>
+
+
+    </data>
+</odoo>

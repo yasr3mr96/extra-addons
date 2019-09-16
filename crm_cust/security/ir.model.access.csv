@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_crm_order_type,order_type,model_crm_cust_order_type,base.group_user,1,1,1,1
+access_crm_sale_status,sale_status,model_crm_cust_sale_status,base.group_user,1,1,1,1
+

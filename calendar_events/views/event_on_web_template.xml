@@ -1,0 +1,99 @@
+
+<odoo>
+    <data>
+        <template id="assets_frontend_seller_event_calender" inherit_id="website.assets_frontend"
+                  name="Assets Frontend Seller Event Calender">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/calendar_events/static/src/css/theme2.css" type="text/css"/>
+                <script type="text/javascript" src="/calendar_events/static/src/js/caleandar.js"></script>
+            </xpath>
+        </template>
+
+
+        <template id="index2" name="Home">
+            <t t-call="website.layout">
+                <t t-set="no_footer">1</t>
+                <div id="wrap">
+                    <div class="oe_structure" id="oe_structure_website_event_index_1"/>
+                    <div class="container">
+                        <div class="row mt8">
+                            <div class="col-md-12">
+                                <h1 class="text-muted text-center">Gerentes Cooperativos</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 offset-3">
+                                <t t-call="website.pager"/>
+                            </div>
+                        </div>
+                        <div class="row mt32 mb32">
+                            <div class="col-lg-3 oe_structure" id="right_column">
+                                <h1>Forum</h1>
+                                <t t-foreach="forums" t-as="forum">
+                                    <t t-if="forum.name">
+                                    <li class="nav-item">
+                                        <a t-attf-href="/forum/help-1/question/#{ slug(forum) }">
+                                            <t t-esc="forum.name"/>
+                                        </a>
+                                        <br/>
+                                        <span class="oe_no_empty" t-field="forum.website_message_ids[0].body" data-oe-type="html"/>
+
+                                    </li>
+                                </t>
+                                </t>
+
+                            </div>
+                            <div class="col-md-6" id="middle_column">
+                                <h1> Detalle de los eventos </h1>
+                                <div class="text-center text-muted" t-if="not event_ids">
+                                    <h1>No event found</h1>
+                                    <p groups="event.group_event_manager">Use the top menu <i>'Content'</i> to create
+                                        your first event.
+                                    </p>
+                                </div>
+                                <ul class="list-unstyled">
+                                    <li t-foreach="event_ids" t-as="event"
+                                        t-attf-class="media#{' mt-3' if event_index else ''}">
+                                        <div itemscope="itemscope" itemtype="http://schema.org/Event"
+                                             class="media-body">
+                                            <h4>
+                                                <a itemprop="url" t-att-class="event.state == 'done' and 'text-success'"
+                                                   t-attf-href="/event/#{ slug(event) }/#{(not event.menu_id) and 'register' or ''}">
+                                                    <span itemprop="name" t-field="event.name"></span>
+                                                </a>
+                                            </h4>
+
+                                            <div>
+                                                <i class="fa fa-clock-o" role="img" aria-label="Start date"
+                                                   title="Start date"></i>
+                                                <span itemprop="startDate"
+                                                      t-field="event.with_context(tz=event.date_tz).date_begin"
+                                                      t-options='{"hide_seconds":"True"}'></span>
+                                                <i>to</i>
+                                                <span itemprop="endDate"
+                                                      t-field="event.with_context(tz=event.date_tz).date_end"
+                                                      t-options='{"hide_seconds":"True"}'></span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-3">
+                                <h1>Caleandar</h1>
+                                <div id="caleandar"></div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 offset-3">
+                                <t t-call="website.pager"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="oe_structure" id="oe_structure_website_event_index_2"/>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>
